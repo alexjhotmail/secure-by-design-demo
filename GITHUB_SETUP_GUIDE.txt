@@ -1,0 +1,172 @@
+# GitHub Demo Repo — Step-by-Step Setup Guide
+# Lovebeing Business · Secure by Design for Graduates · CN5009 Week 7
+# ─────────────────────────────────────────────────────────────────────────────
+# THIS GUIDE: What to do, why each step matters, and what to say if students ask.
+
+═══════════════════════════════════════════════════════════════
+STEP 1 — CREATE THE REPOSITORY
+═══════════════════════════════════════════════════════════════
+
+Action:
+  1. Log into GitHub
+  2. Click "+" (top right) → "New repository"
+  3. Name: secure-by-design-demo
+  4. Set to PUBLIC (required for free SonarCloud and Dependabot)
+  5. Tick "Add a README file" — we'll replace it
+  6. Click "Create repository"
+
+Why it matters:
+  A public repo is your portfolio. Every file, every commit message,
+  every security setting is visible to any employer who clicks your
+  GitHub profile. This is the point.
+
+If a student asks: "Should my real projects be public?"
+  Not necessarily — but having at least one public portfolio project
+  with visible security evidence is the goal. Employers cannot see
+  private repos. The work you do in private doesn't count for hiring.
+
+═══════════════════════════════════════════════════════════════
+STEP 2 — UPLOAD THE PROJECT FILES
+═══════════════════════════════════════════════════════════════
+
+Upload these files (drag and drop into GitHub, or use git clone + push):
+
+  README.md                  ← The security-documented README
+  SECURITY.md                ← Vulnerability disclosure policy
+  .gitignore                 ← Prevents accidental secret commits
+  .env.example               ← Shows env vars without real values
+  app.py                     ← Flask app with security comments
+  requirements.txt           ← Python dependencies
+  sonar-project.properties   ← SonarCloud config
+  .github/dependabot.yml     ← Automated dependency scanning
+  .github/workflows/codeql.yml ← CodeQL security scanning
+
+CRITICAL: Never upload the .env file. It's in .gitignore but double-check.
+
+If a student asks: "What if I accidentally committed a secret?"
+  1. Immediately rotate/revoke the secret (change the password or API key)
+  2. The commit history cannot be fully erased — the secret is permanently
+     visible even if you delete it. This is why .gitignore matters BEFORE
+     the first commit, not after.
+  3. You can use 'git filter-branch' or BFG Repo Cleaner to rewrite history,
+     but consider the secret already compromised.
+
+═══════════════════════════════════════════════════════════════
+STEP 3 — ENABLE GITHUB SECURITY FEATURES (5 minutes in the UI)
+═══════════════════════════════════════════════════════════════
+
+In your repository on GitHub:
+
+  Settings → Security → "Code security and analysis"
+
+  Enable each of these:
+  ┌─────────────────────────────────────────────────────────────┐
+  │ ✅ Dependency graph          (shows what packages you use)  │
+  │ ✅ Dependabot alerts         (alerts when CVEs are found)   │
+  │ ✅ Dependabot security updates (auto-PRs with patches)      │
+  │ ✅ Secret scanning           (alerts if secrets are pushed) │
+  │ ✅ Code scanning (CodeQL)    (static security analysis)     │
+  └─────────────────────────────────────────────────────────────┘
+
+After enabling, go to: Security tab (top of your repo)
+
+You will see:
+  - "Dependabot alerts" — CVEs in your dependencies
+  - "Code scanning alerts" — CodeQL findings
+  - "Secret scanning alerts" — any leaked credentials
+
+What to SHOW in class:
+  1. Navigate to Security tab → show it's now active
+  2. Click "Dependabot alerts" → explain what a CVE is
+  3. Point out: "This is what hiring managers see when they click
+     your GitHub profile and check your security settings."
+
+If a student asks: "What is a CVE?"
+  CVE stands for Common Vulnerabilities and Exposures. It's a public
+  database (maintained by MITRE, funded by CISA) of known security
+  vulnerabilities in software. Every vulnerability gets a CVE ID like
+  CVE-2021-44228 (Log4Shell). When a package you use gets a CVE,
+  Dependabot will tell you and offer a patch.
+
+═══════════════════════════════════════════════════════════════
+STEP 4 — CONNECT TO SONARCLOUD (15 minutes)
+═══════════════════════════════════════════════════════════════
+
+SonarCloud scans your code and produces a public dashboard.
+The badge in the README pulls from this dashboard in real time.
+
+  1. Go to https://sonarcloud.io
+  2. Sign in with GitHub
+  3. Click "+" → "Analyze new project"
+  4. Select your "secure-by-design-demo" repository
+  5. Choose the free plan (for public repos)
+  6. SonarCloud will scan on every push automatically
+
+After scanning:
+  - Your project dashboard shows: Bugs, Vulnerabilities, Security Hotspots
+  - Copy your badge URLs from the dashboard → paste into README.md
+  - The README now shows a live badge that employers can click
+
+What to SHOW in class:
+  1. Go to sonarcloud.io → show the project dashboard
+  2. Click "Security" tab → show any findings
+  3. Show the badge in the README on GitHub → click through to the live report
+  4. Say: "This took 15 minutes to set up. It runs forever, on every push,
+     for free. And any employer who looks at your GitHub sees this."
+
+If a student asks: "What does the Quality Gate mean?"
+  SonarCloud sets a 'Quality Gate' — a pass/fail threshold for code quality
+  and security. The badge turns green (passing) or red (failing). The default
+  gate fails if there are: any new vulnerabilities, critical bugs, or code
+  coverage below a threshold. For a portfolio project, a passing gate signals
+  professional engineering standards.
+
+═══════════════════════════════════════════════════════════════
+STEP 5 — VERIFY THE SECURITY TAB SHOWS GREEN
+═══════════════════════════════════════════════════════════════
+
+Go to: github.com/YOUR_USERNAME/secure-by-design-demo/security
+
+You should see:
+  ✅ Security policy (SECURITY.md present)
+  ✅ Dependabot (enabled)
+  ✅ Code scanning (CodeQL active)
+  ✅ Secret scanning (enabled)
+
+This is your "Green Flag" portfolio — exactly what slide 6 shows.
+
+═══════════════════════════════════════════════════════════════
+KEY CONCEPTS TO KNOW BEFORE PRESENTING
+═══════════════════════════════════════════════════════════════
+
+ARGON2 vs BCRYPT (Slide 4, 13):
+  Both are password hashing algorithms. Both are strong.
+  Argon2id is preferred because:
+  - Its memory cost is configurable (bcrypt's is fixed)
+  - Memory-hard = expensive for GPU-based brute-force attacks
+  - It won the Password Hashing Competition (2015)
+  - OWASP currently recommends Argon2id as first choice
+
+SESSION FIXATION (in app.py):
+  An attacker can set a user's session ID before they log in,
+  then use that same ID to hijack their authenticated session.
+  Calling session.clear() after successful login regenerates the
+  session ID, preventing this. A small detail that shows deep thinking.
+
+SAME ERROR MESSAGE FOR WRONG USERNAME AND WRONG PASSWORD:
+  app.py returns "Invalid username or password" for both cases.
+  This is deliberate — returning "Username not found" separately
+  tells attackers which usernames exist (username enumeration).
+  Security through consistent error messaging.
+
+PARAMETERISED QUERIES (prevents SQL injection):
+  app.py uses: db.execute("SELECT ... WHERE username = ?", (username,))
+  The ? placeholder is filled by the database driver, not string
+  concatenation. This prevents SQL injection — the most common web
+  vulnerability (OWASP A03:2021).
+
+HTTP SECURITY HEADERS (set_security_headers function):
+  - X-Content-Type-Options: nosniff → prevents MIME sniffing attacks
+  - X-Frame-Options: DENY → prevents clickjacking
+  - Strict-Transport-Security → forces HTTPS after first visit
+  These are free, 3-line additions that signal professional awareness.
