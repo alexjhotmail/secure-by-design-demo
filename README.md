@@ -4,7 +4,7 @@
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=alexjhotmail_secure-by-design-demo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alexjhotmail_secure-by-design-demo)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=alexjhotmail_secure-by-design-demo&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=alexjhotmail_secure-by-design-demo)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=secure-by-design-demo&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=secure-by-design-demo)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=alexjhotmail_secure-by-design-demo&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=alexjhotmail_secure-by-design-demo)
 
 This project is intentionally simple — a basic Flask web app with a login form and a notes feature. The purpose is to demonstrate what **Secure by Design** looks like in practice on a real codebase.
 
